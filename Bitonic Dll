@@ -1,0 +1,112 @@
+import java.util.*;
+
+class Node {
+    int data;
+    Node next, prev;
+
+    Node(int d) {
+        data = d;
+        next = prev = null;
+    }
+}
+
+public class Main {
+
+    // Reverse a Doubly Linked List
+    static Node reverse(Node head) {
+        Node curr = head;
+        Node temp = null;
+
+        while (curr != null) {
+            temp = curr.prev;
+            curr.prev = curr.next;
+            curr.next = temp;
+            curr = curr.prev;
+        }
+
+        if (temp != null)
+            head = temp.prev;
+
+        return head;
+    }
+
+    // Merge two sorted Doubly Linked Lists
+    static Node merge(Node a, Node b) {
+        if (a == null) return b;
+        if (b == null) return a;
+
+        if (a.data <= b.data) {
+            a.next = merge(a.next, b);
+            if (a.next != null) a.next.prev = a;
+            a.prev = null;
+            return a;
+        } else {
+            b.next = merge(a, b.next);
+            if (b.next != null) b.next.prev = b;
+            b.prev = null;
+            return b;
+        }
+    }
+
+    // Sort Bitonic DLL in O(n)
+    static Node sortBitonicDLL(Node head) {
+        if (head == null || head.next == null)
+            return head;
+
+        Node curr = head;
+
+        // find peak
+        while (curr.next != null && curr.data <= curr.next.data) {
+            curr = curr.next;
+        }
+
+        // already sorted
+        if (curr.next == null)
+            return head;
+
+        // split
+        Node second = curr.next;
+        curr.next = null;
+        second.prev = null;
+
+        // reverse decreasing part
+        second = reverse(second);
+
+        // merge
+        return merge(head, second);
+    }
+
+    // Print DLL
+    static void printDLL(Node head) {
+        Node t = head;
+        while (t != null) {
+            System.out.print(t.data + " ");
+            t = t.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+
+        int n = in.nextInt();
+        Node head = null, temp = null;
+
+        for (int i = 0; i < n; i++) {
+            int data = in.nextInt();
+            Node nn = new Node(data);
+
+            if (head == null) {
+                head = nn;
+                temp = nn;
+            } else {
+                temp.next = nn;
+                nn.prev = temp;
+                temp = nn;
+            }
+        }
+
+        head = sortBitonicDLL(head);
+        printDLL(head);
+    }
+}
