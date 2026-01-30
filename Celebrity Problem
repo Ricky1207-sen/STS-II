@@ -1,0 +1,57 @@
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) {
+
+        Scanner in = new Scanner(System.in);
+        Stack<Integer> s = new Stack<>();
+
+        int n = in.nextInt();   // number of people
+        int[][] arr = new int[n][n];
+
+        // read matrix
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                arr[i][j] = in.nextInt();
+            }
+        }
+
+        // push all people into stack
+        for (int i = 0; i < n; i++) {
+            s.push(i);
+        }
+
+        // eliminate non-celebrities
+        while (s.size() > 1) {
+            int a = s.pop();
+            int b = s.pop();
+
+            if (arr[a][b] == 1)
+                s.push(b);   // a knows b → a not celeb
+            else
+                s.push(a);   // a doesn't know b → b not celeb
+        }
+
+        // potential celebrity
+        int x = s.pop();
+
+        // verify candidate
+        boolean celeb = true;
+
+        for (int i = 0; i < n; i++) {
+            if (i == x) continue;
+
+            if (arr[i][x] == 0 || arr[x][i] == 1) {
+                celeb = false;
+                break;
+            }
+        }
+
+        if (celeb)
+            System.out.println(x);
+        else
+            System.out.println("No celebrity");
+
+        in.close();
+    }
+}
