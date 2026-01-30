@@ -13,7 +13,9 @@ public class Main {
 
         Node odd = head;
         Node even = head.next;
-        Node evenHead = even;
+
+        Node oddHead = odd;     // store start of odd list
+        Node evenHead = even;   // store start of even list
 
         // split odd & even position nodes
         while (even != null && even.next != null) {
@@ -24,14 +26,16 @@ public class Main {
             even = even.next;
         }
 
-        // 🔹 attach odd list after even list (EVEN FIRST)
+        // find tail of even list
         Node evenTail = evenHead;
-        while (evenTail.next != null)
+        while (evenTail.next != null) {
             evenTail = evenTail.next;
+        }
 
-        evenTail.next = head;
+        // attach odd list after even list
+        evenTail.next = oddHead;
 
-        return evenHead;
+        return evenHead;   // even first, then odd
     }
 
     public static void print(Node head) {
@@ -51,8 +55,9 @@ public class Main {
 
         for (int i = 0; i < n; i++) {
             Node node = new Node(sc.nextInt());
-            if (head == null) head = tail = node;
-            else {
+            if (head == null) {
+                head = tail = node;
+            } else {
                 tail.next = node;
                 tail = node;
             }
@@ -64,3 +69,4 @@ public class Main {
         sc.close();
     }
 }
+
