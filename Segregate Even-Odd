@@ -1,0 +1,66 @@
+import java.util.Scanner;
+
+class Node {
+    int data;
+    Node next;
+    Node(int d) { data = d; }
+}
+
+public class Main {
+
+    public static Node evenOddList(Node head) {
+        if (head == null || head.next == null) return head;
+
+        Node odd = head;
+        Node even = head.next;
+        Node evenHead = even;
+
+        // split odd & even position nodes
+        while (even != null && even.next != null) {
+            odd.next = even.next;
+            odd = odd.next;
+
+            even.next = odd.next;
+            even = even.next;
+        }
+
+        // 🔹 attach odd list after even list (EVEN FIRST)
+        Node evenTail = evenHead;
+        while (evenTail.next != null)
+            evenTail = evenTail.next;
+
+        evenTail.next = head;
+
+        return evenHead;
+    }
+
+    public static void print(Node head) {
+        Node cur = head;
+        while (cur != null) {
+            System.out.print(cur.data + " ");
+            cur = cur.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        Node head = null, tail = null;
+
+        for (int i = 0; i < n; i++) {
+            Node node = new Node(sc.nextInt());
+            if (head == null) head = tail = node;
+            else {
+                tail.next = node;
+                tail = node;
+            }
+        }
+
+        head = evenOddList(head);
+        print(head);
+
+        sc.close();
+    }
+}
