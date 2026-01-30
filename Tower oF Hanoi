@@ -1,0 +1,56 @@
+/*
+  Tower of Hanoi has:
+
+      3 rods → source, auxiliary, destination
+
+      n disks
+
+      Rules:
+
+        Move one disk at a time
+
+        Bigger disk cannot be placed on smaller disk
+
+        Goal → move all disks from source to destination
+
+        Minimum moves required = 2ⁿ − 1 
+*/
+
+import java.util.Scanner;
+
+class Main {
+
+    static void move(int from, int to) {
+        System.out.println("Move disk from rod " + from + " to rod " + to);
+    }
+
+    static void toh(int n) {
+        int total = (1 << n) - 1;   // 2^n - 1
+
+        int src = 1, aux = 2, dest = 3;
+
+        // swap rods if number of disks is even
+        if (n % 2 == 0) {
+            int temp = dest;
+            dest = aux;
+            aux = temp;
+        }
+
+        for (int i = 1; i <= total; i++) {
+            if (i % 3 == 1) move(src, dest);
+            else if (i % 3 == 2) move(src, aux);
+            else move(aux, dest);
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of disks: ");
+        int n = sc.nextInt();
+
+        toh(n);
+
+        sc.close();
+    }
+}
