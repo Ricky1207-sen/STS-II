@@ -1,0 +1,59 @@
+import java.util.Scanner;
+
+class Node {
+    int val;
+    Node next;
+
+    Node(int v) {
+        val = v;
+        next = null;
+    }
+}
+
+public class Main {
+
+    // Floyd Cycle Detection
+    static boolean hasCycle(Node head) {
+        Node slow = head;
+        Node fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;          // 1 step
+            fast = fast.next.next;     // 2 steps
+
+            if (slow == fast) return true;
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        Node head = null, tail = null;
+
+        // create list
+        for (int i = 0; i < n; i++) {
+            Node node = new Node(sc.nextInt());
+            if (head == null) {
+                head = tail = node;
+            } else {
+                tail.next = node;
+                tail = node;
+            }
+        }
+
+        // loop position (1-based), 0 = no loop
+        int pos = sc.nextInt();
+
+        if (pos > 0) {
+            Node cur = head;
+            for (int i = 1; i < pos; i++) cur = cur.next;
+            tail.next = cur;
+        }
+
+        System.out.println(hasCycle(head));
+        sc.close();
+    }
+}
